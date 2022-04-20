@@ -17,7 +17,7 @@ weighted_f1_scores = []
 for i in range(FOLDS):
     olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
     olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
-    olid["prefix"] = "binary"
+    olid["prefix"] = "olid_a"
     olid = olid.rename(columns={'Text': 'input_text', 'Class': 'target_text'})
     olid = olid[["prefix", "input_text", "target_text"]]
 
