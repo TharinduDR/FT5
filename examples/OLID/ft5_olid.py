@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from ft5.args import T5Args
 from ft5.evaluation import print_information
 from ft5.t5_model import T5Model
+import math
 
 import torch
 
@@ -19,15 +20,16 @@ olid = olid[["prefix", "input_text", "target_text"]]
 train_df, eval_df = train_test_split(olid, test_size=0.2)
 
 model_args = T5Args()
-model_args.num_train_epochs = 3
+model_args.num_train_epochs = 5
 model_args.no_save = False
 model_args.fp16 = False
 model_args.learning_rate = 1e-5
+model_args.train_batch_size = 32
 model_args.max_length = 3
 model_args.max_seq_length = 256
 model_args.evaluate_generated_text = True
 model_args.evaluate_during_training = True
-model_args.evaluate_during_training_steps = 400
+model_args.evaluate_during_training_steps = int(math.floor(len(train_df)/(model_args.train_batch_size*3) / 100.0)) * 100
 model_args.evaluate_during_training_verbose = True
 model_args.use_multiprocessing = False
 model_args.use_multiprocessing_for_evaluation = False
