@@ -42,13 +42,10 @@ for i in range(FOLDS):
     model_args.overwrite_output_dir = True
     model_args.save_recent_only = True
     model_args.manual_seed = SEED*i
-    model_args.wandb_project = "FT5"
 
     model_type = "t5"
     model_name = "t5-base"
     model_name_prefix = "olid_" + model_name
-
-    model_args.wandb_kwargs = {"name": model_name_prefix}
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
