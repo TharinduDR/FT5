@@ -55,8 +55,8 @@ for threshold in thresholds:
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
     model_args.cache_dir = os.path.join(model_name_prefix, "cache_dir")
 
-    model_args.wandb_project = "ft5"
-    model_args.wandb_kwargs = {"name": model_name_prefix}
+    # model_args.wandb_project = "ft5"
+    # model_args.wandb_kwargs = {"name": model_name_prefix}
 
     model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=3)
 
