@@ -31,7 +31,7 @@ model_args.use_multiprocessing = False
 model_args.use_multiprocessing_for_evaluation = False
 model_args.use_multiprocessed_decoding = False
 
-model = T5Model("t5", "t5-large", args=model_args)
+model = T5Model("t5", "t5-large", args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=0)
 
 # Train the model
 model.train_model(train_df, eval_data=eval_df)
