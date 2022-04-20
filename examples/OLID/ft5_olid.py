@@ -34,6 +34,7 @@ model_args.evaluate_during_training_verbose = True
 model_args.use_multiprocessing = False
 model_args.use_multiprocessing_for_evaluation = False
 model_args.use_multiprocessed_decoding = False
+model_args.overwrite_output_dir = True
 
 model = T5Model("t5", "t5-base", args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=0)
 
