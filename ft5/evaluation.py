@@ -1,6 +1,7 @@
 from sklearn.metrics import recall_score, precision_score, f1_score
 
-def print_information(predictions, real_values):
+
+def sentence_label_evaluation(predictions, real_values):
 
     labels = set(real_values)
 
@@ -17,3 +18,6 @@ def print_information(predictions, real_values):
     print("Weighter F1 Score {}".format(f1_score(real_values, predictions, average='weighted')))
 
     print("Macro F1 Score {}".format(f1_score(real_values, predictions, average='macro')))
+
+    return f1_score(real_values, predictions, average='macro'), f1_score(real_values, predictions, average='weighted')
+

@@ -5,6 +5,8 @@ import random
 import warnings
 from dataclasses import asdict
 from multiprocessing import Pool
+import glob
+import shutil
 
 
 import numpy as np
@@ -582,6 +584,12 @@ class T5Model:
                             )
 
                     if args.save_steps > 0 and global_step % args.save_steps == 0:
+
+                        if args.save_recent_only:
+                            del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                            for del_path in del_paths:
+                                shutil.rmtree(del_path)
+
                         # Save model checkpoint
                         output_dir_current = os.path.join(
                             output_dir, "checkpoint-{}".format(global_step)
@@ -615,6 +623,12 @@ class T5Model:
                         )
 
                         if args.save_eval_checkpoints:
+
+                            if args.save_recent_only:
+                                del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                                for del_path in del_paths:
+                                    shutil.rmtree(del_path)
+
                             self.save_model(
                                 output_dir_current,
                                 optimizer,
@@ -738,6 +752,12 @@ class T5Model:
                         model.train()
 
             epoch_number += 1
+
+            if args.save_recent_only:
+                del_paths = glob.glob(os.path.join(output_dir, 'checkpoint-*'))
+                for del_path in del_paths:
+                    shutil.rmtree(del_path)
+
             output_dir_current = os.path.join(
                 output_dir, "checkpoint-{}-epoch-{}".format(global_step, epoch_number)
             )
