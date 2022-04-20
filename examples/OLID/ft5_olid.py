@@ -5,6 +5,8 @@ from ft5.args import T5Args
 from ft5.evaluation import print_information
 from ft5.t5_model import T5Model
 
+import torch
+
 olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
 olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
 
