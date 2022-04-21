@@ -28,7 +28,7 @@ for i in range(FOLDS):
     model_args.no_save = False
     model_args.fp16 = False
     model_args.learning_rate = 1e-5
-    model_args.train_batch_size = 16
+    model_args.train_batch_size = 8
     model_args.max_length = 3
     model_args.max_seq_length = 256
     model_args.evaluate_generated_text = True
