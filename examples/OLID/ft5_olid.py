@@ -47,7 +47,7 @@ for i in range(FOLDS):
     model_name = "google/byt5-base"
     threshold = 0.05
     # model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
-    model_name_prefix = "olid_" + model_name
+    model_name_prefix = "olid_" + model_name.replace('/', '-')
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
