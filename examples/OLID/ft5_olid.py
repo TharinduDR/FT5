@@ -43,10 +43,10 @@ for i in range(FOLDS):
     model_args.save_recent_only = True
     model_args.manual_seed = SEED*i
 
-    model_type = "t5"
-    # model_name = "t5-base"
+    model_type = "byt5"
+    model_name = "google/byt5-base"
     threshold = 0.05
-    model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
+    # model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
     model_name_prefix = "olid_" + model_name
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
