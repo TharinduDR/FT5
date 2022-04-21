@@ -28,7 +28,7 @@ for i in range(FOLDS):
     model_args.no_save = False
     model_args.fp16 = False
     model_args.learning_rate = 1e-5
-    model_args.train_batch_size = 8
+    model_args.train_batch_size = 16
     model_args.max_length = 3
     model_args.max_seq_length = 256
     model_args.evaluate_generated_text = True
@@ -43,11 +43,11 @@ for i in range(FOLDS):
     model_args.save_recent_only = True
     model_args.manual_seed = SEED*i
 
-    model_type = "byt5"
-    model_name = "google/byt5-base"
-    threshold = 0.05
-    # model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
-    model_name_prefix = "olid_" + model_name.replace('/', '-')
+    model_type = "t5"
+    # model_name = "t5-base"
+    threshold = 0.1
+    model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
+    model_name_prefix = "olid_" + model_name
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
