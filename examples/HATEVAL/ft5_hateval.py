@@ -15,13 +15,24 @@ macro_f1_scores = []
 weighted_f1_scores = []
 
 for i in range(FOLDS):
-    olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
-    olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
-    olid["prefix"] = "olid_a"
-    olid = olid.rename(columns={'Text': 'input_text', 'Class': 'target_text'})
-    olid = olid[["prefix", "input_text", "target_text"]]
+    # olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
+    # olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
 
-    train_df, eval_df = train_test_split(olid, test_size=0.2, random_state=SEED * i)
+    hateval = pd.read_csv("hateval2019_en_train.csv")
+    hateval_test = pd.read_csv("hateval2019_en_test.csv")
+
+    hateval = hateval[["text", "HS"]]
+    hateval_test = hateval_test[["text", "HS"]]
+
+    hateval['HS'] = hateval['HS'].map({1: "HAT", 0: "NOT"})
+    hateval_test['HS'] = hateval_test['HS'].map({1: "HAT", 0: "NOT"})
+
+
+    hateval["prefix"] = "hateval"
+    hateval = olid.rename(columns={'text': 'input_text', 'HS': 'target_text'})
+    hateval = hateval[["prefix", "input_text", "target_text"]]
+
+    train_df, eval_df = train_test_split(hateval, test_size=0.2, random_state=SEED * i)
 
     model_args = T5Args()
     model_args.num_train_epochs = 5
@@ -63,14 +74,14 @@ for i in range(FOLDS):
 
     test_list = []
 
-    for index, row in olid_test.iterrows():
-       test_list.append("olid_a: " + row['Text'])
+    for index, row in hateval_test.iterrows():
+       test_list.append("hateval: " + row['text'])
 
     model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),
                     cuda_device=0)
 
     preds = model.predict(test_list)
-    macro_f1, weighted_f1 = sentence_label_evaluation(preds, olid_test["Class"].tolist())
+    macro_f1, weighted_f1 = sentence_label_evaluation(preds, hateval_test["HS"].tolist())
     macro_f1_scores.append(macro_f1)
     weighted_f1_scores.append(weighted_f1)
 
