@@ -22,8 +22,8 @@ for i in range(FOLDS):
     hateval = hateval[["text", "HS"]]
     hateval_test = hateval_test[["text", "HS"]]
 
-    hateval['HS'] = hateval['HS'].map({1: "HAT", 0: "NOT"})
-    hateval_test['HS'] = hateval_test['HS'].map({1: "HAT", 0: "NOT"})
+    hateval['HS'] = hateval['HS'].map({1: "HAT", 0: "NOH"})
+    hateval_test['HS'] = hateval_test['HS'].map({1: "HAT", 0: "NOH"})
 
 
     hateval["prefix"] = "hateval"
