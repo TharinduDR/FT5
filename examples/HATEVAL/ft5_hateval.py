@@ -16,8 +16,8 @@ weighted_f1_scores = []
 
 for i in range(FOLDS):
 
-    hateval = pd.read_csv("hateval2019_en_train.csv")
-    hateval_test = pd.read_csv("hateval2019_en_test.csv")
+    hateval = pd.read_csv("examples/HATEVAL/hateval2019_en_train.csv")
+    hateval_test = pd.read_csv("examples/HATEVAL/hateval2019_en_test.csv")
 
     hateval = hateval[["text", "HS"]]
     hateval_test = hateval_test[["text", "HS"]]
