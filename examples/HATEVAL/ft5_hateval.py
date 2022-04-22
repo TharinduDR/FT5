@@ -15,8 +15,6 @@ macro_f1_scores = []
 weighted_f1_scores = []
 
 for i in range(FOLDS):
-    # olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
-    # olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
 
     hateval = pd.read_csv("hateval2019_en_train.csv")
     hateval_test = pd.read_csv("hateval2019_en_test.csv")
@@ -29,7 +27,7 @@ for i in range(FOLDS):
 
 
     hateval["prefix"] = "hateval"
-    hateval = olid.rename(columns={'text': 'input_text', 'HS': 'target_text'})
+    hateval = hateval.rename(columns={'text': 'input_text', 'HS': 'target_text'})
     hateval = hateval[["prefix", "input_text", "target_text"]]
 
     train_df, eval_df = train_test_split(hateval, test_size=0.2, random_state=SEED * i)
@@ -58,7 +56,7 @@ for i in range(FOLDS):
     # model_name = "t5-base"
     threshold = 0.1
     model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
-    model_name_prefix = "olid_" + model_name
+    model_name_prefix = "hateval_" + model_name
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
