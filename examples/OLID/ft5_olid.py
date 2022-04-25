@@ -45,7 +45,7 @@ for i in range(FOLDS):
 
     model_type = "t5"
     # model_name = "t5-base"
-    threshold = 0.1
+    threshold = 0.15
     model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
     model_name_prefix = "olid_" + model_name
 
