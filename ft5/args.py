@@ -1,10 +1,9 @@
 import json
 import os
 import sys
-from dataclasses import asdict, dataclass, field, fields
 from multiprocessing import cpu_count
-import warnings
 
+from dataclasses import asdict, dataclass, field
 from torch.utils.data import Dataset
 
 
@@ -125,7 +124,7 @@ class ModelArgs:
         with open(os.path.join(output_dir, "model_args.json"), "w") as f:
             args_dict = self.get_args_for_saving()
             if args_dict["tokenizer_type"] is not None and not isinstance(
-                args_dict["tokenizer_type"], str
+                    args_dict["tokenizer_type"], str
             ):
                 args_dict["tokenizer_type"] = type(args_dict["tokenizer_type"]).__name__
             json.dump(args_dict, f)
@@ -138,6 +137,7 @@ class ModelArgs:
                     model_args = json.load(f)
 
                 self.update_from_dict(model_args)
+
 
 @dataclass
 class T5Args(ModelArgs):
@@ -167,4 +167,3 @@ class T5Args(ModelArgs):
     top_k: float = None
     top_p: float = None
     use_multiprocessed_decoding: bool = True
-

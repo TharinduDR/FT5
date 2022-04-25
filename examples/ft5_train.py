@@ -1,13 +1,14 @@
-from datasets import Dataset
-from datasets import load_dataset
-import numpy as np
-from sklearn.model_selection import train_test_split
-from ft5.t5_model import T5Model
-from ft5.args import T5Args
 import math
 import os
 
+import numpy as np
 import torch
+from datasets import Dataset
+from datasets import load_dataset
+from sklearn.model_selection import train_test_split
+
+from ft5.args import T5Args
+from ft5.t5_model import T5Model
 
 thresholds = [0.05, 0.1, 0.15]
 offensive_thresholds = [0.8, 0.7, 0.6]
@@ -21,7 +22,7 @@ for threshold in thresholds:
 
     for offensive_threshold in offensive_thresholds:
         data['target_text'] = np.where(data['average'] >= offensive_threshold, 'OFF', None)
-        data['target_text'] = np.where(data['average'] <= (1-offensive_threshold), 'NOT', None)
+        data['target_text'] = np.where(data['average'] <= (1 - offensive_threshold), 'NOT', None)
 
         data = data[data['target_text'].notna()]
 
@@ -67,5 +68,5 @@ for threshold in thresholds:
         # Train the model
         model.train_model(train_df, eval_data=eval_df)
 
-    # Evaluate the model
+        # Evaluate the model
         result = model.eval_model(eval_df)

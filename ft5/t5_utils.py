@@ -2,19 +2,11 @@ import logging
 import os
 import pickle
 from multiprocessing import Pool
-from os import truncate
-from typing import Tuple
 
-import pandas as pd
-import torch
-from tokenizers.implementations import ByteLevelBPETokenizer
-from tokenizers.processors import BertProcessing
+from datasets import Dataset as HFDataset
+from datasets import load_dataset
 from torch.utils.data import Dataset
 from tqdm.auto import tqdm
-from transformers import PreTrainedTokenizer
-from datasets import load_dataset
-from datasets import Dataset as HFDataset
-
 
 logger = logging.getLogger(__name__)
 
@@ -138,8 +130,8 @@ class T5Dataset(Dataset):
         )
 
         if os.path.exists(cached_features_file) and (
-            (not args.reprocess_input_data and not args.no_cache)
-            or (mode == "dev" and args.use_cached_eval_features and not args.no_cache)
+                (not args.reprocess_input_data and not args.no_cache)
+                or (mode == "dev" and args.use_cached_eval_features and not args.no_cache)
         ):
             logger.info(" Loading features from cached file %s", cached_features_file)
             with open(cached_features_file, "rb") as handle:
@@ -155,7 +147,7 @@ class T5Dataset(Dataset):
             ]
 
             if (mode == "train" and args.use_multiprocessing) or (
-                mode == "dev" and args.use_multiprocessing_for_evaluation
+                    mode == "dev" and args.use_multiprocessing_for_evaluation
             ):
                 if args.multiprocessing_chunksize == -1:
                     chunksize = max(len(data) // (args.process_count * 2), 500)
