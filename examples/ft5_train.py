@@ -18,9 +18,8 @@ solid = Dataset.to_pandas(load_dataset('tharindu/SOLID', split='train', sep="\t"
 
 for threshold in thresholds:
 
-    data = solid.loc[solid['std'] < threshold]
-
     for offensive_threshold in offensive_thresholds:
+        data = solid.loc[solid['std'] < threshold]
         data['target_text'] = np.where(data['average'] >= offensive_threshold, 'OFF', None)
         data['target_text'] = np.where(data['average'] <= (1 - offensive_threshold), 'NOT', None)
 
