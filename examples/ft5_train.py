@@ -14,11 +14,12 @@ thresholds = [0.05, 0.1, 0.15]
 offensive_thresholds = [0.8, 0.7, 0.6]
 SEED = 777
 
-solid = Dataset.to_pandas(load_dataset('tharindu/SOLID', split='train', sep="\t"))
-
 for threshold in thresholds:
 
     for offensive_threshold in offensive_thresholds:
+        solid = Dataset.to_pandas(load_dataset('tharindu/SOLID', split='train', sep="\t"))
+        print("Building the model for ", threshold, " STD threshold and ", offensive_threshold, " offensive threshold")
+
         data = solid.loc[solid['std'] < threshold]
         data['target_text'] = np.where(data['average'] >= offensive_threshold, 'OFF', None)
         data['target_text'] = np.where(data['average'] <= (1 - offensive_threshold), 'NOT', None)
@@ -69,3 +70,7 @@ for threshold in thresholds:
 
         # Evaluate the model
         result = model.eval_model(eval_df)
+
+        model = None
+        del model
+
