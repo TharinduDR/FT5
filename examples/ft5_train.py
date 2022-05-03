@@ -12,7 +12,7 @@ from ft5.t5_model import T5Model
 import pandas as pd
 
 thresholds = [0.05, 0.1, 0.15]
-offensive_thresholds = [0.8, 0.7, 0.6]
+offensive_thresholds = [0.8, 0.7, 0.6, 0.5]
 SEED = 777
 
 
