@@ -9,10 +9,20 @@ from sklearn.model_selection import train_test_split
 
 from ft5.args import T5Args
 from ft5.t5_model import T5Model
+import pandas as pd
 
 thresholds = [0.05, 0.1, 0.15]
 offensive_thresholds = [0.8, 0.7, 0.6]
 SEED = 777
+
+
+cctk = pd.read_csv("examples/CCTK/train.csv")
+
+cctk['target_text'] = np.where(cctk['toxic'] == 1, 'TOX', 'NOT')
+cctk = cctk[cctk['target_text'].notna()]
+cctk["prefix"] = "cctk"
+cctk = cctk.rename(columns={'comment_text': 'input_text'})
+cctk = cctk[["prefix", "input_text", "target_text"]]
 
 for threshold in thresholds:
 
@@ -30,7 +40,10 @@ for threshold in thresholds:
         data = data.rename(columns={'text': 'input_text'})
         data = data[["prefix", "input_text", "target_text"]]
 
-        train_df, eval_df = train_test_split(data, test_size=0.2, random_state=SEED)
+        full_data = pd.concat([data, cctk], ignore_index=True)
+        full_data = full_data.sample(frac=1)
+
+        train_df, eval_df = train_test_split(full_data, test_size=0.2, random_state=SEED)
 
         model_args = T5Args()
         model_args.num_train_epochs = 5
@@ -54,7 +67,7 @@ for threshold in thresholds:
 
         model_type = "t5"
         model_name = "t5-base"
-        model_name_prefix = "ft5_" + str(threshold) + "_" + str(offensive_threshold)
+        model_name_prefix = "ft5_" + str(threshold) + "_" + str(offensive_threshold) + "_CCTK"
 
         model_args.output_dir = os.path.join(model_name_prefix, "outputs")
         model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
