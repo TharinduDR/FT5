@@ -68,7 +68,7 @@ for threshold in thresholds:
             model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
             model_args.cache_dir = os.path.join(model_name_prefix, "cache_dir")
 
-            model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=1)
+            model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=2)
 
             # Train the model
             model.train_model(train_df, eval_data=eval_df)
@@ -82,7 +82,7 @@ for threshold in thresholds:
                 test_list.append("ahsd: " + row['tweet'])
 
             model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),
-                            cuda_device=1)
+                            cuda_device=2)
 
             preds = model.predict(test_list)
             macro_f1, weighted_f1 = sentence_label_evaluation(preds, ahsd_test['target_text'].tolist())
