@@ -15,6 +15,8 @@ SEED = 777
 macro_f1_scores = []
 weighted_f1_scores = []
 
+
+
 for i in range(FOLDS):
     olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
     olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
