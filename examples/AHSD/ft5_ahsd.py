@@ -19,7 +19,7 @@ thresholds = [0.05, 0.1, 0.15]
 offensive_thresholds = [0.8, 0.7, 0.6, 0.5]
 
 for threshold in thresholds:
-    for offensive_threshold in offensive_thresholds
+    for offensive_threshold in offensive_thresholds:
         for i in range(FOLDS):
             # olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
             # olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
