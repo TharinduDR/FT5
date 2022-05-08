@@ -24,7 +24,7 @@ for threshold in thresholds:
             # olid = pd.read_csv("examples/OLID/olid_train.csv", sep="\t")
             # olid_test = pd.read_csv("examples/OLID/olid_test.csv", sep="\t")
 
-            ahsd = pd.read_csv("examples/AHSD/davidson2017.csv")
+            ahsd = pd.read_csv("examples/AHSD/labeled_data.csv")
             ahsd_train, ahsd_test = train_test_split(ahsd, test_size=0.2, random_state=777)
 
 
