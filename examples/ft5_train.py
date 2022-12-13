@@ -148,6 +148,8 @@ elif strategy=="both" or strategy=="solid":
         model_args.wandb_project = "ft5"
         model_args.wandb_kwargs = {"name": model_name_prefix}
 
+        print(cuda_device)
+
         model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=cuda_device)
 
         # Train the model
