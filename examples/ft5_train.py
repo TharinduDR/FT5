@@ -111,8 +111,11 @@ elif strategy=="both" or strategy=="solid":
             full_data = pd.concat([data, cctk], ignore_index=True)
             full_data = full_data.sample(frac=1)
 
+            model_name_prefix = model_type + "_" + str(threshold) + "SOLID_CCTK"
+
         elif strategy == "solid":
             full_data = data
+            model_name_prefix = model_type + "_" + str(threshold) + "_SOLID"
 
         train_df, eval_df = train_test_split(full_data, test_size=0.2, random_state=SEED)
 
@@ -137,8 +140,6 @@ elif strategy=="both" or strategy=="solid":
         model_args.manual_seed = SEED
         model_args.early_stopping_patience = 25
 
-
-        model_name_prefix = "ft5_" + str(threshold)  + "_CCTK"
 
         model_args.output_dir = os.path.join(model_name_prefix, "outputs")
         model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
