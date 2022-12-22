@@ -77,7 +77,7 @@ for i in range(FOLDS):
         test_list.append("olid_a: " + row['Text'])
 
     model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),
-                    cuda_device=1)
+                    cuda_device=cuda_device)
 
     preds = model.predict(test_list)
     macro_f1, weighted_f1 = sentence_label_evaluation(preds, olid_test["Class"].tolist())

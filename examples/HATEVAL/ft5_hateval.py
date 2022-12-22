@@ -1,3 +1,4 @@
+import argparse
 import math
 import os
 import statistics
@@ -10,7 +11,18 @@ from ft5.args import T5Args
 from ft5.evaluation import sentence_label_evaluation
 from ft5.t5_model import T5Model
 
-FOLDS = 10
+parser = argparse.ArgumentParser(
+    description='''evaluates multiple models  ''')
+parser.add_argument('--model_name', required=False, help='model name', default="t5-base")
+parser.add_argument('--model_type', required=False, help='model type', default="t5")
+parser.add_argument('--cuda_device', required=False, help='cuda device', default=0)
+arguments = parser.parse_args()
+
+model_type = arguments.model_type
+model_name = arguments.model_name
+cuda_device = int(arguments.cuda_device)
+
+FOLDS = 5
 SEED = 777
 macro_f1_scores = []
 weighted_f1_scores = []
@@ -52,17 +64,14 @@ for i in range(FOLDS):
     model_args.save_recent_only = True
     model_args.manual_seed = SEED * i
 
-    model_type = "t5"
-    model_name = "t5-base"
-    threshold = 0.05
-    # model_name = os.path.join("ft5_" + str(threshold), "outputs", "best_model")
+
     model_name_prefix = "hateval_" + model_name
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
     model_args.cache_dir = os.path.join(model_name_prefix, "cache_dir")
 
-    model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=0)
+    model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=cuda_device)
 
     # Train the model
     model.train_model(train_df, eval_data=eval_df)
@@ -76,7 +85,7 @@ for i in range(FOLDS):
         test_list.append("hateval: " + row['text'])
 
     model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),
-                    cuda_device=0)
+                    cuda_device=cuda_device)
 
     preds = model.predict(test_list)
     macro_f1, weighted_f1 = sentence_label_evaluation(preds, hateval_test["HS"].tolist())
