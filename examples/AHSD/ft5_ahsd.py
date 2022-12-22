@@ -28,9 +28,6 @@ SEED = 777
 macro_f1_scores = []
 weighted_f1_scores = []
 
-thresholds = [0.05, 0.1, 0.15]
-offensive_thresholds = [0.8, 0.7, 0.6, 0.5]
-
 
 for i in range(FOLDS):
 
