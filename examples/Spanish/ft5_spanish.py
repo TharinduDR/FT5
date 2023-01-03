@@ -31,6 +31,8 @@ model_type = arguments.model_type
 model_name = arguments.model_name
 cuda_device = int(arguments.cuda_device)
 
+os.environ["CUDA_VISIBLE_DEVICES"]=str(cuda_device)
+
 for i in range(FOLDS):
     spanish_train = pd.read_csv("https://raw.githubusercontent.com/fmplaza/OffendES/main/split_MeOffendES/training_set.tsv", sep="\t")
     spanish_test = pd.read_csv("https://raw.githubusercontent.com/fmplaza/OffendES/main/split_MeOffendES/test_set.tsv", sep="\t")
