@@ -423,10 +423,10 @@ class T5Model:
         ):
             # Load in optimizer and scheduler states
             optimizer.load_state_dict(
-                torch.load(os.path.join(args.model_name, "optimizer.pt"))
+                torch.load(os.path.join(args.model_name, "optimizer.pt"), map_location='cuda:0')
             )
             scheduler.load_state_dict(
-                torch.load(os.path.join(args.model_name, "scheduler.pt"))
+                torch.load(os.path.join(args.model_name, "scheduler.pt"), map_location='cuda:0')
             )
 
         if args.n_gpu > 1:
