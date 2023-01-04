@@ -37,7 +37,7 @@ cctk = cctk[["prefix", "input_text", "target_text"]]
 
 if strategy == "cctk":
     data = cctk
-    data['target_text'] = np.where(data['toxic'] == 1, 'TOX', 'NOT')
+    # data['target_text'] = np.where(data['toxic'] == 1, 'TOX', 'NOT')
     # data['target_text'] = np.where(data['toxic'] <= (1 - offensive_threshold), 'NOT', None)
 
     data = data[data['target_text'].notna()]
