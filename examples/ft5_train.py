@@ -89,7 +89,7 @@ if strategy == "cctk":
 
 elif strategy=="both" or strategy=="solid":
 
-    thresholds = [0.15, 0.2]
+    thresholds = [0.05, 0.1]
 
     for threshold in thresholds:
 
