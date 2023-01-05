@@ -31,7 +31,7 @@ model_type = arguments.model_type
 model_name = arguments.model_name
 cuda_device = int(arguments.cuda_device)
 
-os.environ["CUDA_VISIBLE_DEVICES"]=str(cuda_device)
+# os.environ["CUDA_VISIBLE_DEVICES"]=str(cuda_device)
 
 for i in range(FOLDS):
     spanish_train = pd.read_csv("https://raw.githubusercontent.com/fmplaza/OffendES/main/split_MeOffendES/training_set.tsv", sep="\t")
@@ -76,7 +76,7 @@ for i in range(FOLDS):
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
     model_args.cache_dir = os.path.join(model_name_prefix, "cache_dir")
 
-    model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available())
+    model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available(), cuda_device=cuda_device)
 
     # Train the model
     model.train_model(train_df, eval_data=eval_df)
@@ -89,7 +89,7 @@ for i in range(FOLDS):
     for index, row in spanish_test.iterrows():
         test_list.append("olid_a: " + row['comment'])
 
-    model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available())
+    model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),cuda_device=cuda_device)
 
     preds = model.predict(test_list)
     macro_f1, weighted_f1 = sentence_label_evaluation(preds, spanish_test["label"].tolist())
