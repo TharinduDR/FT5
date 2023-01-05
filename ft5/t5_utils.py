@@ -71,7 +71,7 @@ def preprocess_data(data):
     # Add EOS again if truncated?
     if args.preprocess_inputs:
         batch = tokenizer.prepare_seq2seq_batch(
-            src_texts=[prefix + ": " + input_text],
+            src_texts=[prefix + ": " + str(input_text)],
             tgt_texts=[target_text],
             max_length=args.max_seq_length,
             padding="max_length",
