@@ -40,9 +40,9 @@ for i in range(FOLDS):
 
     kold_train, kold_test = train_test_split(kold, test_size=0.2, random_state=SEED)
 
+    kold_train["prefix"] = "olid_a"
     kold_train = kold_train.rename(columns={'comment': 'input_text', 'label': 'target_text'})
     kold_train = kold_train[["prefix", "input_text", "target_text"]]
-    kold_train["prefix"] = "olid_a"
 
     train_df, eval_df = train_test_split(kold_train, test_size=0.2, random_state=SEED * i)
 
