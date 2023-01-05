@@ -34,21 +34,17 @@ cuda_device = int(arguments.cuda_device)
 # os.environ["CUDA_VISIBLE_DEVICES"]=str(cuda_device)
 
 for i in range(FOLDS):
-    spanish_train = pd.read_csv("https://raw.githubusercontent.com/fmplaza/OffendES/main/split_MeOffendES/training_set.tsv", sep="\t")
-    spanish_test = pd.read_csv("https://raw.githubusercontent.com/fmplaza/OffendES/main/split_MeOffendES/test_set.tsv", sep="\t")
-    spanish_train["prefix"] = "olid_a"
-    spanish_train['label'] = spanish_train['label'].replace(['OFP', 'OFG', 'NOE'], 'OFF')
-    spanish_train['label'] = spanish_train['label'].replace(['NO'], 'NOT')
+    kold = pd.read_json('examples/KOLD/kold_v1.json')
+    kold['label'] = kold['OFF'].replace([True, False], ['OFF', 'NOT'])
+    kold = kold[["comment", "label"]]
 
-    kold = pd.read_json('/content/drive/MyDrive/kold_v1.json')
+    kold_train, kold_test = train_test_split(kold, test_size=0.2, random_state=SEED)
 
-    spanish_test['label'] = spanish_test['label'].replace(['OFP', 'OFG', 'NOE'], 'OFF')
-    spanish_test['label'] = spanish_test['label'].replace(['NO'], 'NOT')
+    kold_train = kold_train.rename(columns={'comment': 'input_text', 'label': 'target_text'})
+    kold_train = kold_train[["prefix", "input_text", "target_text"]]
+    kold_train["prefix"] = "olid_a"
 
-    spanish_train = spanish_train.rename(columns={'comment': 'input_text', 'label': 'target_text'})
-    spanish_train = spanish_train[["prefix", "input_text", "target_text"]]
-
-    train_df, eval_df = train_test_split(spanish_train, test_size=0.2, random_state=SEED * i)
+    train_df, eval_df = train_test_split(kold_train, test_size=0.2, random_state=SEED * i)
 
     model_args = T5Args()
     model_args.num_train_epochs = 5
@@ -72,7 +68,7 @@ for i in range(FOLDS):
     model_args.early_stopping_patience = 25
 
 
-    model_name_prefix = "Spanish" + model_name
+    model_name_prefix = "KOLD" + model_name
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
@@ -88,13 +84,13 @@ for i in range(FOLDS):
 
     test_list = []
 
-    for index, row in spanish_test.iterrows():
+    for index, row in kold_test.iterrows():
         test_list.append("olid_a: " + row['comment'])
 
     model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),cuda_device=cuda_device)
 
     preds = model.predict(test_list)
-    macro_f1, weighted_f1 = sentence_label_evaluation(preds, spanish_test["label"].tolist())
+    macro_f1, weighted_f1 = sentence_label_evaluation(preds, kold_test["label"].tolist())
     macro_f1_scores.append(macro_f1)
     weighted_f1_scores.append(weighted_f1)
 
