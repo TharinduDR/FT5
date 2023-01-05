@@ -98,8 +98,8 @@ for i in range(FOLDS):
 
 print("Weighted F1 scores ", weighted_f1_scores)
 print("Mean weighted F1 scores", statistics.mean(weighted_f1_scores))
-print("STD weighted F1 scores", statistics.stdev(weighted_f1_scores))
+# print("STD weighted F1 scores", statistics.stdev(weighted_f1_scores))
 
 print("Macro F1 scores ", macro_f1_scores)
 print("Mean macro F1 scores", statistics.mean(macro_f1_scores))
-print("STD macro F1 scores", statistics.stdev(macro_f1_scores))
+# print("STD macro F1 scores", statistics.stdev(macro_f1_scores))
