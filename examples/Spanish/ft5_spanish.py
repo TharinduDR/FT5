@@ -15,7 +15,7 @@ from ft5.evaluation import sentence_label_evaluation
 from ft5.t5_model import T5Model
 import pandas as pd
 
-FOLDS = 5
+FOLDS = 1
 SEED = 777
 macro_f1_scores = []
 weighted_f1_scores = []
