@@ -34,18 +34,18 @@ cuda_device = int(arguments.cuda_device)
 # os.environ["CUDA_VISIBLE_DEVICES"]=str(cuda_device)
 
 for i in range(FOLDS):
-    mold_train = pd.read_csv("https://raw.githubusercontent.com/TharinduDR/MOLD/master/MOLD_2.0/MOLDV2_train.csv")
-    mold_test = pd.read_csv("https://raw.githubusercontent.com/TharinduDR/MOLD/master/MOLD_2.0/MOLDV2_test.csv")
-    mold_train["prefix"] = "olid_a"
+    hindi = pd.read_csv("https://raw.githubusercontent.com/TharinduDR/DeepOffense/master/examples/hindi/data/hindi_dataset.tsv", sep="\t")
+    hindi['label'] = hindi['task_1'].replace(['HOF', 'NOT'], ['OFF', 'NOT'])
+    hindi = hindi[["text", "label"]]
 
-    mold_train['label'] = mold_train['subtask_a'].replace(['Offensive', 'not offensive'], ['OFF','NOT'])
-    mold_test['label'] = mold_test['subtask_a'].replace(['Offensive', 'not offensive'], ['OFF','NOT'])
+    hindi_train, german_test = train_test_split(hindi, test_size=0.2, random_state=SEED)
 
+    hindi_train["prefix"] = "olid_a"
 
-    mold_train = mold_train.rename(columns={'tweet': 'input_text', 'label': 'target_text'})
-    mold_train = mold_train[["prefix", "input_text", "target_text"]]
+    hindi_train = hindi_train.rename(columns={'text': 'input_text', 'label': 'target_text'})
+    hindi_train = hindi_train[["prefix", "input_text", "target_text"]]
 
-    train_df, eval_df = train_test_split(mold_train, test_size=0.2, random_state=SEED * i)
+    train_df, eval_df = train_test_split(hindi_train, test_size=0.2, random_state=SEED * i)
 
     model_args = T5Args()
     model_args.num_train_epochs = 5
@@ -69,7 +69,7 @@ for i in range(FOLDS):
     model_args.early_stopping_patience = 25
 
 
-    model_name_prefix = "MOLD" + model_name
+    model_name_prefix = "HINDI" + model_name
 
     model_args.output_dir = os.path.join(model_name_prefix, "outputs")
     model_args.best_model_dir = os.path.join(model_name_prefix, "outputs", "best_model")
@@ -85,13 +85,13 @@ for i in range(FOLDS):
 
     test_list = []
 
-    for index, row in mold_test.iterrows():
-        test_list.append("olid_a: " + row['tweet'])
+    for index, row in hindi_test.iterrows():
+        test_list.append("olid_a: " + row['text'])
 
     model = T5Model(model_type, model_args.best_model_dir, args=model_args, use_cuda=torch.cuda.is_available(),cuda_device=cuda_device)
 
     preds = model.predict(test_list)
-    macro_f1, weighted_f1 = sentence_label_evaluation(preds, mold_test["label"].tolist())
+    macro_f1, weighted_f1 = sentence_label_evaluation(preds, hindi_test["label"].tolist())
     macro_f1_scores.append(macro_f1)
     weighted_f1_scores.append(weighted_f1)
 
