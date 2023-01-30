@@ -55,7 +55,7 @@ if strategy == "cctk":
     model_args.learning_rate = 1e-5
     model_args.train_batch_size = 8
     model_args.max_length = 3
-    model_args.max_seq_length = 128
+    model_args.max_seq_length = 256
     model_args.evaluate_generated_text = True
     model_args.evaluate_during_training = True
     model_args.evaluate_during_training_steps = int(
